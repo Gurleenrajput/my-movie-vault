@@ -14,6 +14,7 @@ import {
   useAddMovieToCollection,
   useRemoveMovieFromCollection,
 } from "@/hooks/useCollections";
+import { useIsAdmin, useIsApproved } from "@/hooks/useUserRoles";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
@@ -42,6 +43,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { UserManagement } from "@/components/UserManagement";
 
 interface TMDBMovie {
   id: number;
@@ -68,6 +70,8 @@ interface TMDBMovieDetails {
 
 const Admin = () => {
   const { user, loading: authLoading } = useAuth();
+  const { data: isAdmin, isLoading: adminLoading } = useIsAdmin();
+  const { data: isApproved, isLoading: approvedLoading } = useIsApproved();
   const { data: movies, isLoading: moviesLoading } = useMovies();
   const { data: collections, isLoading: collectionsLoading } = useCollections();
   const addMovie = useAddMovie();
@@ -93,7 +97,7 @@ const Admin = () => {
   } | null>(null);
   const [collectionMovies, setCollectionMovies] = useState<string[]>([]);
 
-  if (authLoading) {
+  if (authLoading || adminLoading || approvedLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -103,6 +107,29 @@ const Admin = () => {
 
   if (!user) {
     return <Navigate to="/login" replace />;
+  }
+
+  if (!isApproved && !isAdmin) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <main className="pt-24 pb-12 px-4">
+          <div className="container mx-auto max-w-md text-center">
+            <Card className="bg-card border-border">
+              <CardContent className="pt-6">
+                <div className="text-6xl mb-4">⏳</div>
+                <h2 className="text-xl font-semibold text-foreground mb-2">
+                  Awaiting Approval
+                </h2>
+                <p className="text-muted-foreground">
+                  Your account is pending admin approval. You'll be able to add movies once approved.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </main>
+      </div>
+    );
   }
 
   const handleSearch = async (e: React.FormEvent) => {
@@ -218,8 +245,15 @@ const Admin = () => {
       <main className="pt-24 pb-12 px-4">
         <div className="container mx-auto max-w-4xl">
           <h1 className="font-display text-4xl text-foreground mb-8">
-            Admin Dashboard
+            {isAdmin ? "Admin Dashboard" : "Dashboard"}
           </h1>
+
+          {/* User Management - Admin Only */}
+          {isAdmin && (
+            <div className="mb-8">
+              <UserManagement />
+            </div>
+          )}
 
           {/* Collections Section */}
           <Card className="mb-8 bg-card border-border">
@@ -503,30 +537,32 @@ const Admin = () => {
                           • ⭐ {movie.vote_average?.toFixed(1) || "N/A"}
                         </p>
                       </div>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button variant="destructive" size="sm">
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>Delete Movie</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              Are you sure you want to delete "{movie.title}" from
-                              your collection? This action cannot be undone.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction
-                              onClick={() => deleteMovie.mutate(movie.id)}
-                            >
-                              Delete
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
+                      {isAdmin && (
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="destructive" size="sm">
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Delete Movie</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Are you sure you want to delete "{movie.title}" from
+                                your collection? This action cannot be undone.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={() => deleteMovie.mutate(movie.id)}
+                              >
+                                Delete
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      )}
                     </div>
                   ))}
                 </div>
