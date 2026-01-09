@@ -14,6 +14,69 @@ export type Database = {
   }
   public: {
     Tables: {
+      collection_movies: {
+        Row: {
+          added_at: string
+          collection_id: string
+          id: string
+          movie_id: string
+        }
+        Insert: {
+          added_at?: string
+          collection_id: string
+          id?: string
+          movie_id: string
+        }
+        Update: {
+          added_at?: string
+          collection_id?: string
+          id?: string
+          movie_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collection_movies_collection_id_fkey"
+            columns: ["collection_id"]
+            isOneToOne: false
+            referencedRelation: "collections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "collection_movies_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "movies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      collections: {
+        Row: {
+          cover_image: string | null
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       movies: {
         Row: {
           backdrop_path: string | null
