@@ -11,7 +11,8 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { user, signIn, loading } = useAuth();
+  const [isSignUp, setIsSignUp] = useState(false);
+  const { user, signIn, signUp, loading } = useAuth();
 
   if (loading) {
     return (
@@ -29,9 +30,16 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await signIn(email, password);
+      if (isSignUp) {
+        await signUp(email, password);
+        setIsSignUp(false); // Switch to login after signup
+        setEmail("");
+        setPassword("");
+      } else {
+        await signIn(email, password);
+      }
     } catch {
-      // Error handled in signIn
+      // Error handled in auth functions
     } finally {
       setIsLoading(false);
     }
@@ -60,9 +68,13 @@ const Login = () => {
 
       <Card className="w-full max-w-md border-border bg-card">
         <CardHeader className="text-center">
-          <CardTitle className="font-display text-2xl">Admin Login</CardTitle>
+          <CardTitle className="font-display text-2xl">
+            {isSignUp ? "Create Account" : "Welcome Back"}
+          </CardTitle>
           <CardDescription>
-            Sign in to manage your movie collection
+            {isSignUp 
+              ? "Sign up to manage your movie collection" 
+              : "Sign in to manage your movie collection"}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -74,7 +86,7 @@ const Login = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@example.com"
+                placeholder="you@example.com"
                 required
                 className="bg-background"
               />
@@ -88,6 +100,7 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
+                minLength={6}
                 className="bg-background"
               />
             </div>
@@ -99,13 +112,39 @@ const Login = () => {
               {isLoading ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Signing in...
+                  {isSignUp ? "Creating account..." : "Signing in..."}
                 </>
               ) : (
-                "Sign In"
+                isSignUp ? "Create Account" : "Sign In"
               )}
             </Button>
           </form>
+          
+          <div className="mt-4 text-center text-sm text-muted-foreground">
+            {isSignUp ? (
+              <>
+                Already have an account?{" "}
+                <button
+                  type="button"
+                  onClick={() => setIsSignUp(false)}
+                  className="text-primary hover:underline font-medium"
+                >
+                  Sign in
+                </button>
+              </>
+            ) : (
+              <>
+                Don't have an account?{" "}
+                <button
+                  type="button"
+                  onClick={() => setIsSignUp(true)}
+                  className="text-primary hover:underline font-medium"
+                >
+                  Sign up
+                </button>
+              </>
+            )}
+          </div>
         </CardContent>
       </Card>
     </div>
