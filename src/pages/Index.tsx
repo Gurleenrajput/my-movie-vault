@@ -42,7 +42,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="border-t border-border py-8 text-center">
         <p className="text-muted-foreground text-sm">
-          Powered by TMDB • Made with ❤️
+          Made by Gurleen Rajput
         </p>
       </footer>
     </div>
