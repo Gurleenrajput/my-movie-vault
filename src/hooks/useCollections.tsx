@@ -8,6 +8,7 @@ export interface Collection {
   name: string;
   description: string | null;
   cover_image: string | null;
+  user_id: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -119,9 +120,12 @@ export function useAddCollection() {
 
   return useMutation({
     mutationFn: async (collection: { name: string; description?: string }) => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Must be logged in to create collections");
+      
       const { data, error } = await supabase
         .from("collections")
-        .insert(collection)
+        .insert({ ...collection, user_id: user.id })
         .select()
         .single();
 

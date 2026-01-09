@@ -58,6 +58,7 @@ export type Database = {
           id: string
           name: string
           updated_at: string
+          user_id: string | null
         }
         Insert: {
           cover_image?: string | null
@@ -66,6 +67,7 @@ export type Database = {
           id?: string
           name: string
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
           cover_image?: string | null
@@ -74,6 +76,7 @@ export type Database = {
           id?: string
           name?: string
           updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -90,6 +93,7 @@ export type Database = {
           title: string
           tmdb_id: number
           updated_at: string
+          user_id: string | null
           vote_average: number | null
         }
         Insert: {
@@ -104,6 +108,7 @@ export type Database = {
           title: string
           tmdb_id: number
           updated_at?: string
+          user_id?: string | null
           vote_average?: number | null
         }
         Update: {
@@ -118,6 +123,7 @@ export type Database = {
           title?: string
           tmdb_id?: number
           updated_at?: string
+          user_id?: string | null
           vote_average?: number | null
         }
         Relationships: []
