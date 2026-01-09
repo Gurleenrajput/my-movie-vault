@@ -1,5 +1,6 @@
 import { Header } from "@/components/Header";
 import { MovieGrid } from "@/components/MovieGrid";
+import { CollectionsSection } from "@/components/CollectionsSection";
 import { useMovies } from "@/hooks/useMovies";
 
 const Index = () => {
@@ -21,6 +22,9 @@ const Index = () => {
               Click on any movie to see more details.
             </p>
           </section>
+
+          {/* Collections */}
+          <CollectionsSection />
 
           {/* Movies Grid */}
           <section>
