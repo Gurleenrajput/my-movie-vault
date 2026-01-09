@@ -13,6 +13,7 @@ export interface Movie {
   runtime: number | null;
   vote_average: number | null;
   genres: string[] | null;
+  user_id: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -53,10 +54,13 @@ export function useAddMovie() {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: async (movie: Omit<Movie, "id" | "created_at" | "updated_at">) => {
+    mutationFn: async (movie: Omit<Movie, "id" | "created_at" | "updated_at" | "user_id">) => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Must be logged in to add movies");
+      
       const { data, error } = await supabase
         .from("movies")
-        .insert(movie)
+        .insert({ ...movie, user_id: user.id })
         .select()
         .single();
       
