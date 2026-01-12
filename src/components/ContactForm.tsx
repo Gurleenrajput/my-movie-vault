@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Mail } from "lucide-react";
+import { Clapperboard } from "lucide-react";
 import { toast } from "sonner";
 
 const ContactForm = () => {
@@ -48,8 +48,9 @@ const ContactForm = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="secondary" size="sm" className="gap-2 font-medium">
-          Message Me 🎬
+        <Button variant="default" size="default" className="gap-2 font-semibold">
+          <Clapperboard className="h-4 w-4" />
+          Message Gurleen
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
