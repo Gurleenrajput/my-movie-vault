@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Film, LogIn, LogOut, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import ContactForm from "@/components/ContactForm";
 
 export function Header() {
   const { user, signOut } = useAuth();
@@ -17,7 +18,8 @@ export function Header() {
           </span>
         </Link>
 
-        <nav className="flex items-center gap-2">
+        <nav className="flex items-center gap-3">
+          <ContactForm />
           {user ? (
             <>
               <Button 
@@ -36,7 +38,7 @@ export function Header() {
               </Button>
             </>
           ) : (
-            <Button variant="ghost" size="sm" asChild>
+            <Button size="sm" asChild>
               <Link to="/login">
                 <LogIn className="w-4 h-4 mr-2" />
                 Login
