@@ -48,9 +48,8 @@ const ContactForm = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2">
-          <Mail className="h-4 w-4" />
-          Contact Me
+        <Button variant="secondary" size="sm" className="gap-2 font-medium">
+          Message Me 🎬
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
