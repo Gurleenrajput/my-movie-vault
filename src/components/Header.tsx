@@ -1,9 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
-import { Film, LogIn, LogOut, Settings } from "lucide-react";
+import { LogIn, LogOut, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useIsMobile } from "@/hooks/use-mobile";
 import ContactForm from "@/components/ContactForm";
+import logo from "@/assets/logo.png";
 
 export function Header() {
   const { user, signOut } = useAuth();
@@ -15,9 +16,9 @@ export function Header() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo - Left */}
         <Link to="/" className="flex items-center gap-2 group">
-          <Film className="w-7 h-7 text-primary transition-transform group-hover:rotate-12" />
+          <img src={logo} alt="CineLog Logo" className="w-8 h-8 transition-transform group-hover:scale-110" />
           <span className="font-display text-xl md:text-2xl tracking-wide text-foreground">
-            MY<span className="text-primary">MOVIES</span>
+            MY<span className="text-primary">CINELOG</span>
           </span>
         </Link>
 
