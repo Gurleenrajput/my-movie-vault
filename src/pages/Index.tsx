@@ -1,6 +1,7 @@
 import { Header } from "@/components/Header";
 import { MovieGrid } from "@/components/MovieGrid";
 import { CollectionsSection } from "@/components/CollectionsSection";
+import ContactForm from "@/components/ContactForm";
 import { useMovies } from "@/hooks/useMovies";
 
 const Index = () => {
@@ -47,6 +48,10 @@ const Index = () => {
       <footer className="border-t border-border py-12">
         <div className="container mx-auto px-4">
           <div className="flex flex-col items-center gap-6">
+            {/* Social Links */}
+            {/* Contact Button */}
+            <ContactForm />
+            
             {/* Social Links */}
             <div className="flex items-center gap-4">
               <a
