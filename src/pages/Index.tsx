@@ -30,7 +30,7 @@ const Index = () => {
           <section>
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-display text-2xl text-foreground">
-                All Movies 
+                All Movies & TV Shows
                 {movies && movies.length > 0 && (
                   <span className="text-muted-foreground text-lg ml-2">
                     ({movies.length})
