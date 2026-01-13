@@ -49,7 +49,12 @@ const ContactForm = () => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <button 
-          className="bg-zinc-900 text-white py-2.5 px-5 rounded-lg text-sm font-medium border border-zinc-700 shadow-sm transition-all duration-200 hover:bg-zinc-800 hover:border-zinc-600 active:scale-[0.98]"
+          className="text-white py-2.5 px-[18px] rounded-xl text-sm font-medium border border-white/[0.12] backdrop-blur-[8px] transition-all duration-200 ease-out hover:-translate-y-px hover:bg-white/10 active:scale-[0.97]"
+          style={{
+            background: 'rgba(255, 255, 255, 0.06)',
+            boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 6px 18px rgba(0, 0, 0, 0.35)',
+            letterSpacing: '0.2px'
+          }}
         >
           Message Gurleen
         </button>
