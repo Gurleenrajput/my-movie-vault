@@ -48,9 +48,16 @@ const ContactForm = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="default" size="default" className="font-medium px-5">
+        <button 
+          className="text-white py-3 px-5 rounded-[14px] text-sm font-semibold tracking-wide border border-white/[0.08] transition-all duration-[250ms] ease-out hover:scale-105 hover:shadow-[0_12px_32px_rgba(229,9,20,0.45)]"
+          style={{
+            background: 'linear-gradient(135deg, #E50914 0%, #B10610 100%)',
+            boxShadow: '0 8px 24px rgba(229, 9, 20, 0.35)',
+            letterSpacing: '0.3px'
+          }}
+        >
           Message Gurleen
-        </Button>
+        </button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
