@@ -49,14 +49,15 @@ const ContactForm = () => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <button 
-          className="text-white py-3 px-5 rounded-[14px] text-sm font-semibold tracking-wide border border-white/[0.08] transition-all duration-[250ms] ease-out hover:scale-105 hover:shadow-[0_12px_32px_rgba(229,9,20,0.45)]"
+          className="relative overflow-hidden text-white py-3 px-6 rounded-xl text-sm font-semibold tracking-wide border border-white/10 transition-all duration-300 ease-out hover:scale-[1.02] hover:border-white/20 active:scale-[0.98] group"
           style={{
             background: 'linear-gradient(135deg, #E50914 0%, #B10610 100%)',
-            boxShadow: '0 8px 24px rgba(229, 9, 20, 0.35)',
-            letterSpacing: '0.3px'
+            boxShadow: '0 4px 20px rgba(229, 9, 20, 0.4), inset 0 1px 0 rgba(255,255,255,0.1)',
+            letterSpacing: '0.5px'
           }}
         >
-          Message Gurleen
+          <span className="relative z-10">Message Gurleen</span>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
