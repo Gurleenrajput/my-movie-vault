@@ -1,6 +1,19 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <script>
+  (function () {
+    const allowedHosts = ["gurleen.pp.ua", "www.gurleen.pp.ua"];
+    if (allowedHosts.includes(window.location.hostname)) {
+      const s = document.createElement("script");
+      s.async = true;
+      s.src =
+        "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3186921584976782";
+      s.crossOrigin = "anonymous";
+      document.head.appendChild(s);
+    }
+  })();
+</script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- TODO: Set the document title to the name of your application -->
