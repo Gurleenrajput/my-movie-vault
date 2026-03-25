@@ -21,25 +21,93 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  const SESSION_TIMEOUT_MS = 60 * 60 * 1000; // 1 hour
+
   useEffect(() => {
+    let sessionTimer: ReturnType<typeof setTimeout> | null = null;
+
+    const startSessionTimer = () => {
+      if (sessionTimer) clearTimeout(sessionTimer);
+      sessionTimer = setTimeout(async () => {
+        await supabase.auth.signOut();
+        toast.info("Session expired. Please sign in again.");
+        navigate("/login");
+      }, SESSION_TIMEOUT_MS);
+    };
+
+    const clearSessionTimer = () => {
+      if (sessionTimer) {
+        clearTimeout(sessionTimer);
+        sessionTimer = null;
+      }
+    };
+
+    // Check if existing session has exceeded 1 hour
+    const checkSessionAge = (session: Session | null) => {
+      if (!session) return false;
+      const signedInAt = new Date(session.user.last_sign_in_at || session.user.created_at).getTime();
+      const elapsed = Date.now() - signedInAt;
+      return elapsed >= SESSION_TIMEOUT_MS;
+    };
+
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      async (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
+
+        if (session) {
+          if (checkSessionAge(session)) {
+            await supabase.auth.signOut();
+            toast.info("Session expired. Please sign in again.");
+            navigate("/login");
+          } else {
+            const signedInAt = new Date(session.user.last_sign_in_at || session.user.created_at).getTime();
+            const remaining = SESSION_TIMEOUT_MS - (Date.now() - signedInAt);
+            if (sessionTimer) clearTimeout(sessionTimer);
+            sessionTimer = setTimeout(async () => {
+              await supabase.auth.signOut();
+              toast.info("Session expired. Please sign in again.");
+              navigate("/login");
+            }, remaining);
+          }
+        } else {
+          clearSessionTimer();
+        }
       }
     );
 
     // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      if (session && checkSessionAge(session)) {
+        await supabase.auth.signOut();
+        setSession(null);
+        setUser(null);
+        setLoading(false);
+        toast.info("Session expired. Please sign in again.");
+        navigate("/login");
+      } else {
+        setSession(session);
+        setUser(session?.user ?? null);
+        setLoading(false);
+        if (session) {
+          const signedInAt = new Date(session.user.last_sign_in_at || session.user.created_at).getTime();
+          const remaining = SESSION_TIMEOUT_MS - (Date.now() - signedInAt);
+          sessionTimer = setTimeout(async () => {
+            await supabase.auth.signOut();
+            toast.info("Session expired. Please sign in again.");
+            navigate("/login");
+          }, remaining);
+        }
+      }
     });
 
-    return () => subscription.unsubscribe();
-  }, []);
+    return () => {
+      subscription.unsubscribe();
+      clearSessionTimer();
+    };
+  }, [navigate]);
 
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({
